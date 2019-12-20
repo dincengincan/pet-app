@@ -14,6 +14,9 @@ class FavoritesPage extends React.Component{
 
 
     componentDidMount() {
+        document.title = "Favourites Page"
+       
+       
         Axios
           .get("http://5dd7af92505c590014d3b4ac.mockapi.io/favorites")
           .then(res =>

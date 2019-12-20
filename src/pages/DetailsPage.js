@@ -27,7 +27,7 @@ class DetailsPage extends React.Component {
         })
 
        
-       /* //Alternativ 2 - Fetch
+       /* //Alternative 2 - Fetch
 
          fetch(`http://5dd7af92505c590014d3b4ac.mockapi.io/pets/${id}`)
         .then((resp) => resp.json())

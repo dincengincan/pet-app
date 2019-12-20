@@ -5,7 +5,6 @@ import {stringContains} from "../helpers";
 import Axios from 'axios';
 
 
-//render içerisinde, const pets kısmında neden divleri kapsayan [] kullandık?
 
 class PetList extends React.Component{
     breed;
@@ -43,6 +42,7 @@ class PetList extends React.Component{
         if(prevProps.searchValue !== this.props.searchValue){
             this.filterPets();
         }
+        
     }
 
     //when component is Mounted get data and save it to the state.
@@ -101,6 +101,29 @@ class PetList extends React.Component{
     }*/
 
     
+
+    //Şu anda buton güncellemesi için state'den bilgi alıyorum, favorite page güncellemesi için ise API'ı birnevi state gibi kullanıyorum...
+    //...Burada bir saçmalık var ama çözemedim? Direk state'den hem butonu hem de favoritePage'i kontrol etmek mümkün olabilmeli???
+
+    removeFavouriteFromState = (id) => {
+        //Çıkarılan pet için state'i güncelle
+        //Burada state'i başarılı bir şekilde güncelliyorum ve buton yeşile dönüyor. 
+        //Fakat bu API'ı dinamik bir şekilde güncellenmediğim için fake bir etki oluyor.
+        //Zaten sayfayı yenileyince tekrar kırmızıya dönüyor.
+        const newFavPets = this.state.favouritePets.filter(pet => {
+            return pet.pet.id != id;
+        })
+        this.setState({
+            favouritePets: newFavPets
+        }, ()=>console.log(this.state.favouritePets))
+    }
+    
+    //Eklenen pet için state'i güncelle
+    addFavouriteToState = (newPet) => {
+        this.setState({
+            favouritePets: this.state.favouritePets.concat(newPet)
+        })
+    }
     
     render(){
         const newList = this.state.pets.slice(0, this.state.index+4)
@@ -110,13 +133,16 @@ class PetList extends React.Component{
             {
                 newList.map(pet=> {
                     const isFavourite = this.state.favouritePets.some(favouritePet => {
-                        if(favouritePet.pet && favouritePet.owner === "Engin Can"){
+                        if(favouritePet.pet && favouritePet.owner == "Engin Can"){
                             return pet.id === favouritePet.pet.id
                         }
                     })  
-                    return  <Pet key={Math.random()} {...pet}
-                            checkFavourite = {this.checkFavourite}           
-                            isFavourite = {isFavourite} />
+                    return  <Pet key={Math.random()} pet={pet}         
+                            isFavourite = {isFavourite}
+                            favouritePets = {this.state.favouritePets}
+                            removeFavouriteFromState = {this.removeFavouriteFromState}
+                            addFavouriteToState={this.addFavouriteToState}
+                            owner= "Engin Can" />
                 }) 
             }
         </div>];

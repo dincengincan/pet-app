@@ -12,13 +12,9 @@ class Pet extends React.Component{
         }
     }
 
-    addFavourite = (pet) => {
-        this.setState({
-            favourite: !this.state.favourite
-        })
-        
-    }
-    /*addFavourite = (pet) => {
+    
+    addFavourite = (pet, petFav) => {
+        //Önce tıklanan peti API'a ekle ki favoritePage güncellensin.
         Axios
         .post("http://5dd7af92505c590014d3b4ac.mockapi.io/favorites", {
             pet: pet,
@@ -30,17 +26,30 @@ class Pet extends React.Component{
                 })
             }
         })
-    }*/
-
-    removeFavourite = (pet) => {
-        console.log(pet.name,"Removed!")
+        //Daha sonra PetListteki favoritePets state'ine ekle ki buton kırmızıya dönsün.
+        this.props.addFavouriteToState(petFav);
     }
-    // BURADA CHECK FAVORITE KISMINDA MANTIK HATASI VAR. ÜSTTE PETLISTTE FAVORITE STATE DENEN KISIMDA BU DATA VARSA BUTONU DEĞİŞTİR DİCEM YAPAMADIM
-    render() {
-        //console.log(this.props)
-        const {name, image, age, breed, id, onScroll, isFavourite } = this.props;
-        const detailPage = `/details/${id}`;
+
+    
+    // burada tıklanan pet i dinamik bir şekilde API'dan silmek istiyorum fakat MockApiId'sini bu comp seviyesinde göremiyorum. 
+    removeFavourite = (MockAPIid, url, id) => {
+        //Önce PetListteki favoritePets state'inden çıkar ki butonu yeşile döndürsün.
+        this.props.removeFavouriteFromState(id);
+        //Daha sonra API'dan çıkar ki favoritePage güncellensin.
+        return fetch(url + '/' + MockAPIid, {
+          method: 'delete'
+        })
+        .then(response => response.json());
         
+
+        
+      }
+    
+    render() {
+        
+        const {name, image, age, breed, id, onScroll } = this.props.pet;
+        const detailPage = `/details/${id}`;
+        console.log(this.props);
         return(
             <div  className="col-lg-6 col-md-4 mb-4">
             <div className="card h-100">
@@ -62,9 +71,9 @@ class Pet extends React.Component{
                 <div className="card-footer">
                     
                     {
-                        isFavourite
-                        ? <button onClick={() => this.removeFavourite(this.props)} type="button" class="btn btn-outline-danger">Remove from Favorites</button>
-                        : <button onClick={() => this.addFavourite(this.props)} type="button" class="btn btn-outline-success">Add to Favorites</button>
+                        this.props.isFavourite 
+                        ? <button onClick={() => this.removeFavourite({/*burada dinamik bir mockAPIId olmalı */}, "http://5dd7af92505c590014d3b4ac.mockapi.io/favorites", this.props.pet.id)} type="button" class="btn btn-outline-danger">Remove from Favorites</button>
+                        : <button onClick={() => this.addFavourite(this.props.pet, this.props)} type="button" class="btn btn-outline-success">Add to Favorites</button>
                     }
                     
                     
