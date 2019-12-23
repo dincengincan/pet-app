@@ -53,9 +53,9 @@ class Pet extends React.Component{
             return pet.pet.id === id;
         })
         //Determine its mockAPIid
-        if(selectedItem){
-            let selectedItemId = selectedItem.mockApiId;
-            Axios
+        const selectedItemId = selectedItem.mockApiId
+        
+        Axios
         .delete(`http://5dd7af92505c590014d3b4ac.mockapi.io/favorites/${selectedItemId}`)
         .then(data => {
         if(data){
@@ -64,12 +64,6 @@ class Pet extends React.Component{
             }, () => console.log(this.state.favourite))
         }
     })
-        }else{
-            return false;
-        }
-        
-        
-        
         
 
     }
