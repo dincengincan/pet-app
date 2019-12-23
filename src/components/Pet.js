@@ -13,7 +13,14 @@ class Pet extends React.Component{
     }
 
     
-    addFavourite = (pet, petFav) => {
+    
+    componentDidMount() {
+        this.setState({
+            favourite: this.state.favourite
+        })
+    }
+    
+    addFavourite = (pet) => {
         //Önce tıklanan peti API'a ekle ki favoritePage güncellensin.
         Axios
         .post("http://5dd7af92505c590014d3b4ac.mockapi.io/favorites", {
@@ -23,27 +30,49 @@ class Pet extends React.Component{
             if(data){
                 this.setState({
                     favourite: !this.state.favourite
-                })
+                }, () => console.log(this.state.favourite))
             }
         })
-        //Daha sonra PetListteki favoritePets state'ine ekle ki buton kırmızıya dönsün.
-        this.props.addFavouriteToState(petFav);
+        
     }
 
     
-    // burada tıklanan pet i dinamik bir şekilde API'dan silmek istiyorum fakat MockApiId'sini bu comp seviyesinde göremiyorum. 
-    removeFavourite = (MockAPIid, url, id) => {
-        //Önce PetListteki favoritePets state'inden çıkar ki butonu yeşile döndürsün.
+    
+    removeFavourite = (id) => {
+        /*//Önce PetListteki favoritePets state'inden çıkar ki butonu yeşile döndürsün.
         this.props.removeFavouriteFromState(id);
         //Daha sonra API'dan çıkar ki favoritePage güncellensin.
         return fetch(url + '/' + MockAPIid, {
           method: 'delete'
         })
-        .then(response => response.json());
+        .then(response => response.json());*/
+       
+        
+        //Find the Item will be removed
+        const selectedItem = this.props.favouritePets.find(pet => {
+            return pet.pet.id === id;
+        })
+        //Determine its mockAPIid
+        if(selectedItem){
+            let selectedItemId = selectedItem.mockApiId;
+            Axios
+        .delete(`http://5dd7af92505c590014d3b4ac.mockapi.io/favorites/${selectedItemId}`)
+        .then(data => {
+        if(data){
+            this.setState({
+                favourite: !this.state.favourite
+            }, () => console.log(this.state.favourite))
+        }
+    })
+        }else{
+            return false;
+        }
+        
+        
+        
         
 
-        
-      }
+    }
     
     render() {
         
@@ -71,9 +100,9 @@ class Pet extends React.Component{
                 <div className="card-footer">
                     
                     {
-                        this.props.isFavourite 
-                        ? <button onClick={() => this.removeFavourite({/*burada dinamik bir mockAPIId olmalı */}, "http://5dd7af92505c590014d3b4ac.mockapi.io/favorites", this.props.pet.id)} type="button" class="btn btn-outline-danger">Remove from Favorites</button>
-                        : <button onClick={() => this.addFavourite(this.props.pet, this.props)} type="button" class="btn btn-outline-success">Add to Favorites</button>
+                        this.state.favourite || this.props.isFavourite
+                        ? <button onClick={() => this.removeFavourite(this.props.pet.id)} type="button" class="btn btn-outline-danger">Remove from Favorites</button>
+                        : <button onClick={() => this.addFavourite(this.props.pet)} type="button" class="btn btn-outline-success">Add to Favorites</button>
                     }
                     
                     
