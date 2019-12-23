@@ -33,7 +33,7 @@ class FavoritesPage extends React.Component{
     render(){
         return(
             <div>
-                <h2>Favorite Page</h2>
+                <h2>Favorites Page</h2>
                 {this.state.favouritePets.map(pet => {
                     if(pet.pet && pet.owner ==="Engin Can"){
                         return <FavoritesPets key={Math.random()} {...pet}
