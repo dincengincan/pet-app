@@ -121,6 +121,7 @@ class PetList extends React.Component{
                     return  <Pet key={Math.random()} pet={pet}         
                             favouritePets = {this.state.favouritePets}
                             isFavourite = {isFavourite}
+                            getFavouritePets = {this.getFavouritePets}
                              />
                 }) 
             }

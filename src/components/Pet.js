@@ -7,18 +7,8 @@ class Pet extends React.Component{
     
     constructor(props){
         super(props);
-        this.state = {
-            favourite: false
-        }
     }
 
-    
-    
-    componentDidMount() {
-        this.setState({
-            favourite: this.state.favourite
-        })
-    }
     
     addFavourite = (pet) => {
         //Önce tıklanan peti API'a ekle ki favoritePage güncellensin.
@@ -28,9 +18,7 @@ class Pet extends React.Component{
             owner: "Engin Can"
         }).then(data => {
             if(data){
-                this.setState({
-                    favourite: !this.state.favourite
-                }, () => console.log(this.state.favourite))
+                this.props.getFavouritePets();
             }
         })
         
@@ -59,9 +47,7 @@ class Pet extends React.Component{
         .delete(`http://5dd7af92505c590014d3b4ac.mockapi.io/favorites/${selectedItemId}`)
         .then(data => {
         if(data){
-            this.setState({
-                favourite: !this.state.favourite
-            }, () => console.log(this.state.favourite))
+            this.props.getFavouritePets();
         }
     })
         
@@ -94,7 +80,7 @@ class Pet extends React.Component{
                 <div className="card-footer">
                     
                     {
-                        this.state.favourite || this.props.isFavourite
+                        this.props.isFavourite
                         ? <button onClick={() => this.removeFavourite(this.props.pet.id)} type="button" class="btn btn-outline-danger">Remove from Favorites</button>
                         : <button onClick={() => this.addFavourite(this.props.pet)} type="button" class="btn btn-outline-success">Add to Favorites</button>
                     }

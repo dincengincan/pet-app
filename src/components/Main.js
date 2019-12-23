@@ -8,7 +8,7 @@ function Main(props) {
             <Switch>
                 <Route exact path="/" component={HomePage}/>
                 <Route exact path="/favoriler" component={FavoritesPage}/>
-                <Route exact path="/details/:id" component={() => <DetailsPage />}/>
+                <Route exact path="/details/:id" component={DetailsPage}/>
 
             </Switch>
         </div>
